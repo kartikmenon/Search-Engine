@@ -1,0 +1,23 @@
+TESTING
+Kartik Menon
+Lab 4: Crawler
+
+Testing for my various files:
+
+1) web.c
+File provided. The only line I included was curl_easy_setopt(curl_handle, CURLOPT_FAILONERROR, 1); to check for 400+ error codes on returned HTML.
+
+2) hashtable.c
+For every time some memory is allocated, it is checked to make sure the returned pointer by malloc() or calloc() is not null.
+For hashLookUp, I check that the inputs aren’t null, and if they are I exit the program, because that means I’m passing them invalid pointers in my crawler.c
+
+3) list.c
+Again, I check the return pointers of malloc()/calloc().
+
+4) crawler.c
+I outsourced my argument checking to a function called validateArguments(). It checks to see if the user asked for help (“—-help”), if the number of arguments is not 4 (including the command executable crawler), and checks that the inputted depth is a single digit and between 0 and 4, along with checking if the supplied directory is good and writeable.
+
+I perform the standard checks on the return values of malloc()/calloc() to make sure the returned pointers are not NULL.
+On each URL passed in, including the seed, I check to make sure the URL is valid (i.e., passes GetWebPage(WebPage) with the added line for curl checking for 400+ errors), I check that it was able to be normalized and able to be added to the hash table. 
+
+Within the second of the main while loops, I make sure that the page retrieved isn’t outside the domain url, by checking the url of the current WebPage for substrings of “http://old-www.cs.dartmouth.edu/~cs50/tse/“. 

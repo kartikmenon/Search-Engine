@@ -1,0 +1,95 @@
+Starting test of indexer
+
+Start date: Wed May  7 22:37:58 EDT 2014
+Indexer usage:
+indexer ./directory index.dat
+indexer ./directory index.dat index.dat indexOut.dat
+
+1) Bad number of arguments
+Command: indexer hello have fourArgs
+[indexer output]: Error: Insufficient arguments. 3 required for indexing, 5 for testing mode.
+
+
+2) Unreadable directory error
+Command: indexer ./unreadable index.dat
+[indexer output]: Failed to get any filenames.
+
+
+3) Nonexistent directory error
+Command: indexer ./nosuchthing index.dat
+[indexer output]: Error: The supplied directory was not found.
+
+
+4) Bad file name within directory
+Command: indexer ./badFileNames index.dat
+[indexer output]: The files in your directory are improperly named. They should be called: 1, 2, ... n.
+
+
+5) Bad file format in directory
+Command: indexer ./badFormat index.dat
+[indexer output]: Error getting file text into HTMLstring buffer.
+
+
+Now testing indexer functionality.
+
+Indexer regular mode: indexer ~cs50/tse/crawler/lvl0 lvl0index.dat
+
+Log: [./src/indexer.c:699] Building the index.
+.
+Log: [./src/indexer.c:758] Done building index. Index saved in target file.
+.
+
+
+A small sample of the produced indexlvl0.dat file:
+include 1 1 1 
+extent 1 1 1 
+wikimedia 1 1 3 
+group 1 1 3 
+gaelg 1 1 1 
+
+Indexer testing mode: indexer ~cs50/tse/crawler/lvl1 lvl1index.dat indexlvl1.dat indexOut.dat
+
+Log: [./src/indexer.c:699] Building the index.
+.
+Log: [./src/indexer.c:758] Done building index. Index saved in target file.
+.
+Log: [./src/indexer.c:771] Testing index rebuilding.
+.
+Log: [./src/indexer.c:782] Index rebuild test complete.
+.
+
+
+Running a UNIX 'diff' command on indexlvl1.dat and indexOut.dat
+[diff -u lvl1index.dat indexOut.dat] Output: 
+If output nonexistent, files identical.
+
+Testing valgrind on the indexer.
+command: valgrind indexer ~cs50/tse/crawler/lvl1 valTest.dat valTest.dat valTestOut.dat
+
+==11837== Memcheck, a memory error detector
+==11837== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==11837== Using Valgrind-3.9.0 and LibVEX; rerun with -h for copyright info
+==11837== Command: indexer /net/class/cs50/tse/crawler/lvl0 valTest.dat valTest.dat valTestOut.dat
+==11837== 
+Log: [./src/indexer.c:699] Building the index.
+.
+Log: [./src/indexer.c:758] Done building index. Index saved in target file.
+.
+Log: [./src/indexer.c:771] Testing index rebuilding.
+.
+Log: [./src/indexer.c:782] Index rebuild test complete.
+.
+==11837== 
+==11837== HEAP SUMMARY:
+==11837==     in use at exit: 0 bytes in 0 blocks
+==11837==   total heap usage: 41,439 allocs, 41,439 frees, 1,093,046 bytes allocated
+==11837== 
+==11837== All heap blocks were freed -- no leaks are possible
+==11837== 
+==11837== For counts of detected and suppressed errors, rerun with: -v
+==11837== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
+
+
+Making index file for submission... Run on ~cs50/tse/crawler/lvl3.
+End date: Wed May  7 22:39:13 EDT 2014
+End indexer testing.
